@@ -6,7 +6,6 @@ class Postgres extends ICrud {
     super()
     this._driver = null
     this._herois = null
-    this._connect()
   }
   async isConnected() {
     try {
@@ -17,11 +16,18 @@ class Postgres extends ICrud {
       return false
     }
   }
-  create(item) {
-    console.log('O item foi salvo em Postgres')
+  async create(item) {
+    const {
+      dataValues
+    } = await this._herois.create(item)
+
+    return dataValues
+  }
+  read(item = {}) {
+    return this._herois.findAll({ where: item, raw: true })
   }
   async defineModel() {
-    this._herois = driver.define('herois', {
+    this._herois = this._driver.define('herois', {
       id: {
         type: Sequelize.INTEGER,
         required: true,
@@ -43,7 +49,7 @@ class Postgres extends ICrud {
     })
     await this._herois.sync()
   }
-  _connect() {
+  async connect() {
     this._driver = new Sequelize(
       'heroes',
       'pauloricardoma',
@@ -56,6 +62,7 @@ class Postgres extends ICrud {
         omitNull: false //necessário para resolver id auto increment
       }
     )
+    await this.defineModel()
   }
 }
 module.exports = Postgres
