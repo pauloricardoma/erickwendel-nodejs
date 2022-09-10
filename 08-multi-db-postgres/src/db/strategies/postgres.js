@@ -23,6 +23,13 @@ class Postgres extends ICrud {
 
     return dataValues
   }
+  update(id, item) {
+    return this._herois.update(item, { where: { id: id }})
+  }
+  delete(id) {
+    const query = id ? { id } : {}
+    return this._herois.destroy({ where: query })
+  }
   read(item = {}) {
     return this._herois.findAll({ where: item, raw: true })
   }
