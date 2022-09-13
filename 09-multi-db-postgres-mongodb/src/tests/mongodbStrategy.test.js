@@ -15,12 +15,15 @@ const MOCK_HEROI_ATUALIZAR = {
   nome: `Patolino-${new Date()}`,
   poder: 'Inteligência'
 }
+let MOCK_HEROI_ID = ''
 
 describe('MongoDB Strategy', function() {
   this.timeout(Infinity)
   this.beforeAll(async () => {
     await context.connect()
     await context.create(MOCK_HEROI_DEFAULT)
+    const result = await context.create(MOCK_HEROI_ATUALIZAR)
+    MOCK_HEROI_ID = result._id;
   })
   it('MongoDB Connection', async function() {
     const result = await context.isConnected()
@@ -37,10 +40,11 @@ describe('MongoDB Strategy', function() {
     assert.deepEqual(result, MOCK_HEROI_DEFAULT)
   })
   it('atualizar', async () => {
-    const result = await context.update(null, {
+    const result = await context.update(MOCK_HEROI_ID, {
       nome: 'Papa-léguas',
       poder: 'Velocidade'
     })
-    assert.deepEqual(result.nModified, 1)
+    console.log({result})
+    assert.deepEqual(result.modifiedCount, 1)
   })
 })
