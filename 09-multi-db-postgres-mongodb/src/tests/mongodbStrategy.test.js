@@ -44,7 +44,10 @@ describe('MongoDB Strategy', function() {
       nome: 'Papa-léguas',
       poder: 'Velocidade'
     })
-    console.log({result})
     assert.deepEqual(result.modifiedCount, 1)
+  })
+  it('deletar', async () => {
+    const result = await context.delete(MOCK_HEROI_ID)
+    assert.deepEqual(result.deletedCount, 1)
   })
 })
