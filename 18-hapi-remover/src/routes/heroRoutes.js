@@ -1,5 +1,6 @@
 const BaseRoute = require('./base/baseRoute')
 const Joi = require('joi')
+const Boom = require('boom')
 
 const failAction = (request, headers, error) => {
   throw error
@@ -46,7 +47,7 @@ class HeroRoutes extends BaseRoute {
           
         } catch (error) {
           console.log('Deu ruim ', error)
-          return 'Erro interno no servidor'
+          return Boom.internal()
         }
       }
     }
@@ -74,9 +75,10 @@ class HeroRoutes extends BaseRoute {
             message: 'Heroi cadastrado com sucesso!',
             _id: result._id
           }
+
         } catch (error) {
           console.log('Deu ruim', error)
-          return 'Internal Error!'
+          return Boom.internal()
         }
       }
     }
@@ -106,18 +108,47 @@ class HeroRoutes extends BaseRoute {
           const dados = JSON.parse(dadosString)
 
           const result = await this.db.update(id, dados)
-          if (result.modifiedCount !== 1) {
-            return {
-              message: 'Não for possivel atualizar!'
-            }
-          }
+          if (result.modifiedCount !== 1) 
+            return Boom.preconditionFailed('Id não encontrado no banco!')
 
           return {
             message: 'Heroi atualizado com sucesso!'
           }
+          
         } catch (error) {
-          console.error('Deu ruim', error)
-          return 'Erro interno!'
+          console.log('Deu ruim', error)
+          return Boom.internal()
+        }
+      }
+    }
+  }
+
+  delete() {
+    return {
+      path: '/herois/{id}',
+      method: 'DELETE',
+      config: {
+        validate: {
+          failAction,
+          params: Joi.object({
+            id: Joi.string().required()
+          })
+        }
+      },
+      handler: async (request) => {
+        try {
+          const { id } = request.params
+          const result = await this.db.delete(id)
+          if (result.deletedCount !== 1) 
+            return Boom.preconditionFailed('Id não encontrado no banco!')
+
+          return {
+            message: 'Heroi removido com sucesso!'
+          }
+
+        } catch (error) {
+          console.log('Deu ruim', error)
+          return Boom.internal()
         }
       }
     }

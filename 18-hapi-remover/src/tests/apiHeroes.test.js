@@ -124,11 +124,66 @@ describe('Suite de testes da API Heroes', function() {
       url: `/herois/${_id}`,
       payload: JSON.stringify(expected)
     })
+    const errorExpected = {
+      statusCode: 412,
+      error: 'Precondition Failed',
+      message: 'Id não encontrado no banco!'
+    }
+
+    const statusCode = result.statusCode
+    const dados = JSON.parse(result.payload)
+
+    assert.ok(statusCode === 412)
+    assert.deepEqual(dados, errorExpected)
+  })
+
+  it('remover DELETE - /herois/:id', async () => {
+    const _id = MOCK_ID
+    const result = await app.inject({
+      method: 'DELETE',
+      url: `/herois/${_id}`
+    })  
 
     const statusCode = result.statusCode
     const dados = JSON.parse(result.payload)
 
     assert.ok(statusCode === 200)
-    assert.deepEqual(dados.message, 'Não for possivel atualizar!')
+    assert.deepEqual(dados.message, 'Heroi removido com sucesso!')
+  })
+  it('remover DELETE - /herois/:id não deve remover', async () => {
+    const _id = `63268bbe4b2f855578f13333`
+    const result = await app.inject({
+      method: 'DELETE',
+      url: `/herois/${_id}`
+    })
+    const expected = {
+      statusCode: 412,
+      error: 'Precondition Failed',
+      message: 'Id não encontrado no banco!'
+    }  
+
+    const statusCode = result.statusCode
+    const dados = JSON.parse(result.payload)
+    
+    assert.ok(statusCode === 412)
+    assert.deepEqual(dados, expected)
+  })
+  it('remover DELETE - /herois/:id não deve remover com id inválido', async () => {
+    const _id = `ID_INVALIDO`
+    const result = await app.inject({
+      method: 'DELETE',
+      url: `/herois/${_id}`
+    })
+    const expected = {
+      statusCode: 500,
+      error: 'Internal Server Error',
+      message: 'An internal server error occurred'
+    }
+
+    const statusCode = result.statusCode
+    const dados = JSON.parse(result.payload)
+
+    assert.ok(statusCode === 500)
+    assert.deepEqual(dados, expected)
   })
 })
