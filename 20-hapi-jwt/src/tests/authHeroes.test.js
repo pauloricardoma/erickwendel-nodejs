@@ -2,7 +2,9 @@ const assert = require('assert')
 const api = require('../api')
 let app = {}
 
-describe.only('Auth test suite', function () {
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ilh1eGFkYXNpbHZhIiwiaWQiOjEsImlhdCI6MTY2MzU1MTg1N30.Ffu-iE35SYmioOW7X_yoNT8CrSaFZEFLDEf8nycz7tw'
+
+describe('Auth test suite', function () {
   this.beforeAll(async () => {
     app = await api
   })
@@ -20,7 +22,7 @@ describe.only('Auth test suite', function () {
     const statusCode = result.statusCode
     const dados = JSON.parse(result.payload)
 
-    assert.ok(statusCode === 200)
+    assert.deepEqual(statusCode, 200)
     assert.ok(dados.token.length > 10)
   })
 })
