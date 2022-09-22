@@ -24,7 +24,7 @@ class MongoDB extends ICrud {
     return STATUS[this._connection.readyState]
   } 
   static connect() {
-    Mongoose.connect('mongodb://pauloricardoma:root@localhost:27017/herois',
+    Mongoose.connect(process.env.MONGODB_URL,
       { useNewUrlParser: true }, function (error) {
         if (!error) return
         console.log('Falha na conexão: ', error)

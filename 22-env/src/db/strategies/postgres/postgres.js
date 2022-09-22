@@ -43,19 +43,18 @@ class Postgres extends ICrud {
     return model
   }
   static connect() {
-    const connection = new Sequelize(
-      'heroes',
-      'pauloricardoma',
-      'root',
-      {
-        host: 'localhost', //devido ao docker neste caso
-        dialect: 'postgres',
-        quoteIdentifiers: false, //ignorar case sensitive
-        operatorAliases: false, // erros de deprecade ignorados
-        omitNull: false, //necessário para resolver id auto increment
-        logging: false, // ignorar o log de manipulacoes no bd
+    const connection = new Sequelize(process.env.POSTGRES_URL, {
+      host: 'localhost', //devido ao docker neste caso
+      dialect: 'postgres',
+      quoteIdentifiers: false, //ignorar case sensitive
+      operatorAliases: false, // erros de deprecade ignorados
+      omitNull: false, //necessário para resolver id auto increment
+      logging: false, // ignorar o log de manipulacoes no bd
+      ssl: process.env.SSL_DB,
+      dialectOptions: {
+        ssl: process.env.SSL_DB,
       }
-    )
+    })
     return connection
   }
 }

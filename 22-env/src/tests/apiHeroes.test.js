@@ -2,7 +2,7 @@ const assert = require('assert')
 const api = require('./../api')
 let app = {}
 
-const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ilh1eGFkYXNpbHZhIiwiaWQiOjEsImlhdCI6MTY2MzU1MTg1N30.Ffu-iE35SYmioOW7X_yoNT8CrSaFZEFLDEf8nycz7tw'
+const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJYdXhhZGFzaWx2YSIsImlhdCI6MTY2MzgxNjM4OX0.Ypqv_WHUfemZWs0e9tDyvL8ixmNni3t-alS45t8cqa8'
 const headers = {
   Authorization: TOKEN
 }
