@@ -43,7 +43,7 @@ class Postgres extends ICrud {
     return model
   }
   static connect() {
-    const connection = new Sequelize(process.env.POSTGRES_URL, {
+    const connection = new Sequelize(process.env.DATABASE_URL, {
       host: 'localhost', //devido ao docker neste caso
       dialect: 'postgres',
       quoteIdentifiers: false, //ignorar case sensitive
@@ -52,7 +52,10 @@ class Postgres extends ICrud {
       logging: false, // ignorar o log de manipulacoes no bd
       ssl: process.env.SSL_DB,
       dialectOptions: {
-        ssl: process.env.SSL_DB,
+        ssl: {
+          require: process.env.SSL_DB,
+          rejectUnauthorized: false
+        } 
       }
     })
     return connection
